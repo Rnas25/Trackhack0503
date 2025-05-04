@@ -1,8 +1,14 @@
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TaskManager {
     private static final String CSV_FILE = "tasks.csv";
@@ -30,17 +36,19 @@ public class TaskManager {
     
 
     // Todo.javaからToDoを取得
-    public static List<Task> getTasks(List<Task> todos) {
+    public static List<Task> getTasks(List<Todo> todos) {
         // 現在の日付を取得
         LocalDate today = LocalDate.now();
         // 日付をフォーマット
         String date = today.format(formatter);
         List<Task> tasks = new ArrayList<>();
-        Task task = new Task("", "0", date);
-        for (Task todo : todos)  {
+        //Task task = new Task("", "0", date);
+        for (Todo todo : todos)  {
+        	Task task = new Task("", "0", date);
             task.setTaskName(todo.getTaskName());
             task.setProgress(todo.getProgress());
             task.setDate(date);
+            tasks.add(task);
         }
         return tasks;
     }
@@ -51,8 +59,8 @@ public class TaskManager {
     public static void saveTasks(List<Task> tasks) {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(CSV_FILE, true), "Shift-JIS"))) {
             for (Task task : tasks) {
-                writer.write(task.getTaskName() + "," + task.getProgress() + "," + task.getDate());
-                writer.newLine();
+               writer.write(task.getTaskName() + "," + task.getProgress() + "," + task.getDate());
+               writer.newLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
