@@ -29,6 +29,7 @@ public class View extends JFrame{
 		//data_read.add(new ArrayList<String>(List.of("タスク4", "20%")));
 		//data_read.add(new ArrayList<String>(List.of("", "")));
 		List<Task> data_read = TaskManager.getLatestTasks();
+		//data_read = new ArrayList<Task>();
 		
 		
 		new View(data_read);
@@ -85,7 +86,8 @@ public class View extends JFrame{
 		// 進捗状況のリスト
 		String[] progress_label = {"", "0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
 		int p_y = 10;
-		for(int i=0; i < data_read.size(); i++) {
+		int k = 0;
+		for(int i=0; i < 10; i++) {
 			// 各項目に対応するパネル
 			JPanel p = new JPanel();
 			p.setOpaque(false);
@@ -97,16 +99,24 @@ public class View extends JFrame{
 			
 			// コンポーネントに表示する文字
 			String task = new String("");
-			if(data_read.get(i).getTaskName() != "") {
-				task = new String(data_read.get(i).getTaskName());
+			
+			if(k < data_read.size()) {
+				if(data_read.get(k).getTaskName() != "") {
+					task = new String(data_read.get(i).getTaskName());
+				}
+				k++;
 			}
+			k = 0;
 			int default_index = 0;
-			if(data_read.get(i).getProgress() != "") {
-				for(int j=0; j < 12; j++) {
-					if(data_read.get(i).getProgress() == progress_label[j]) {
-						default_index = j;
+			if(k < data_read.size()) {
+				if(data_read.get(k).getProgress() != "") {
+					for(int j=0; j < 12; j++) {
+						if(data_read.get(i).getProgress() == progress_label[j]) {
+							default_index = j;
+						}
 					}
 				}
+				k++;
 			}
 			// タスク名のテキストフィールド
 			task_list.add(new JTextField(task));
@@ -201,7 +211,7 @@ public class View extends JFrame{
 					if (!task_list.get(i).getText().isEmpty()) {
 						String task_name = task_list.get(i).getText();
 						String progress_string = (String)progress_list.get(i).getSelectedItem();
-						progress_string = progress_string.replace("%", "");
+						//progress_string = progress_string.replace("%", "");
 						//int progress = (int)Double.parseDouble(progress_string);
 						todos.add(new Todo(task_name, progress_string));
 					}
