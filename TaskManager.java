@@ -1,8 +1,13 @@
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TaskManager {
     private static final String CSV_FILE = "tasks.csv";
@@ -30,14 +35,14 @@ public class TaskManager {
     
 
     // Todo.javaからToDoを取得
-    public static List<Task> getTasks(List<Task> todos) {
+    public static List<Task> getTasks(List<Todo> todos) {
         // 現在の日付を取得
         LocalDate today = LocalDate.now();
         // 日付をフォーマット
         String date = today.format(formatter);
         List<Task> tasks = new ArrayList<>();
         Task task = new Task("", "0", date);
-        for (Task todo : todos)  {
+        for (Todo todo : todos)  {
             task.setTaskName(todo.getTaskName());
             task.setProgress(todo.getProgress());
             task.setDate(date);

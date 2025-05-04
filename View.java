@@ -200,8 +200,8 @@ public class View extends JFrame{
 						String task_name = task_list.get(i).getText();
 						String progress_string = (String)progress_list.get(i).getSelectedItem();
 						progress_string = progress_string.replace("%", "");
-						int progress = (int)Double.parseDouble(progress_string);
-						todos.add(new Todo(task_name, progress));
+						//int progress = (int)Double.parseDouble(progress_string);
+						todos.add(new Todo(task_name, progress_string));
 					}
 				}
 				for (int i=0; i < todos.size(); i++) {
