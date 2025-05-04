@@ -1,11 +1,14 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +16,7 @@ import java.util.List;
 public class TaskManager {
     private static final String CSV_FILE = "tasks.csv";
     // 日付のフォーマットを指定
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd--HH--mm--ss");
 
 
     // CSVファイルが存在しない場合に新規作成するメソッド
@@ -38,7 +41,7 @@ public class TaskManager {
     // Todo.javaからToDoを取得
     public static List<Task> getTasks(List<Todo> todos) {
         // 現在の日付を取得
-        LocalDate today = LocalDate.now();
+        LocalDateTime today = LocalDateTime.now();
         // 日付をフォーマット
         String date = today.format(formatter);
         List<Task> tasks = new ArrayList<>();
@@ -91,12 +94,12 @@ public class TaskManager {
             return new ArrayList<>(); // タスクがない場合は空のリストを返す
         }
 
-        LocalDate latestDate = LocalDate.parse(allTasks.get(0).getDate(), formatter);
+        LocalDateTime latestDate = LocalDateTime.parse(allTasks.get(0).getDate(), formatter);
         List<Task> latestTasks = new ArrayList<>();
         latestTasks.add(allTasks.get(0)); // 最初のタスクを初期値とする
 
         for (int i = 1; i < allTasks.size(); i++) {
-            LocalDate currentDate = LocalDate.parse(allTasks.get(i).getDate(), formatter);
+            LocalDateTime currentDate = LocalDateTime.parse(allTasks.get(i).getDate(), formatter);
             if (currentDate.isAfter(latestDate)) {
                 latestDate = currentDate;
                 latestTasks.clear(); 
