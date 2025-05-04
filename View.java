@@ -22,12 +22,14 @@ public class View extends JFrame{
 	public static void main(String[] args) {
 		// ここで最新のファイルを読み込んで，2次元リストに変換
 		
-		ArrayList<ArrayList<String>> data_read = new ArrayList<ArrayList<String>>();
-		data_read.add(new ArrayList<String>(List.of("タスク1", "10%")));
-		data_read.add(new ArrayList<String>(List.of("タスク2", "10%")));
-		data_read.add(new ArrayList<String>(List.of("タスク3", "10%")));
-		data_read.add(new ArrayList<String>(List.of("タスク4", "20%")));
-		data_read.add(new ArrayList<String>(List.of("", "")));
+		//ArrayList<ArrayList<String>> data_read = new ArrayList<ArrayList<String>>();
+		//data_read.add(new ArrayList<String>(List.of("タスク1", "10%")));
+		//data_read.add(new ArrayList<String>(List.of("タスク2", "10%")));
+		//data_read.add(new ArrayList<String>(List.of("タスク3", "10%")));
+		//data_read.add(new ArrayList<String>(List.of("タスク4", "20%")));
+		//data_read.add(new ArrayList<String>(List.of("", "")));
+		List<Task> data_read = TaskManager.getLatestTasks();
+		
 		
 		new View(data_read);
 	}
@@ -55,7 +57,7 @@ public class View extends JFrame{
 	
 	
 	
-	View(ArrayList<ArrayList<String>> data_read) {
+	View(List<Task> data_read) {
 		super("TODOリスト");
 		// 各コンポーネントを格納する配列
 		ArrayList<JTextField> task_list = new ArrayList<JTextField>();
@@ -83,7 +85,7 @@ public class View extends JFrame{
 		// 進捗状況のリスト
 		String[] progress_label = {"", "0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
 		int p_y = 10;
-		for(int i=0; i < 5; i++) {
+		for(int i=0; i < data_read.size(); i++) {
 			// 各項目に対応するパネル
 			JPanel p = new JPanel();
 			p.setOpaque(false);
@@ -95,13 +97,13 @@ public class View extends JFrame{
 			
 			// コンポーネントに表示する文字
 			String task = new String("");
-			if(data_read.get(i).get(0) != "") {
-				task = new String(data_read.get(i).get(0));
+			if(data_read.get(i).getTaskName() != "") {
+				task = new String(data_read.get(i).getTaskName());
 			}
 			int default_index = 0;
-			if(data_read.get(i).get(1) != "") {
+			if(data_read.get(i).getProgress() != "") {
 				for(int j=0; j < 12; j++) {
-					if(data_read.get(i).get(1) == progress_label[j]) {
+					if(data_read.get(i).getProgress() == progress_label[j]) {
 						default_index = j;
 					}
 				}
