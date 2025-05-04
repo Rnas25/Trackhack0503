@@ -1,30 +1,30 @@
 public class Task {
-    private String taskName; // フィールド名を修正
-    private int progress;
+    private String taskName; 
+    private String progress; // 型はそのまま
     private String date;
 
-    // コンストラクタを追加
-    public Task(String taskName, int progress, String date) {
+    // コンストラクタを修正
+    public Task(String taskName, String progress, String date) {
         this.taskName = taskName;
         this.progress = progress;
         this.date = date;
     }
 
     // getter
-    public String getTaskName() { // メソッド名を修正
+    public String getTaskName() {
         return taskName;
     }
-    public int getProgress() {
+    public String getProgress() {
         return progress;
     }
     public String getDate() {
         return date;
     }
     // setter
-    public void setTaskName(String taskName) { // メソッド名を修正
+    public void setTaskName(String taskName) {
         this.taskName = taskName;
     }
-    public void setProgress(int progress) {
+    public void setProgress(String progress) {
         this.progress = progress;
     }
     public void setDate(String date) {
