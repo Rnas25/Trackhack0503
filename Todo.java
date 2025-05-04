@@ -1,9 +1,9 @@
 public class Todo{
 	String task_name;
-	int progress;
+	String progress;
 	
 	
-	public Todo(String task_name, int progress) {
+	public Todo(String task_name, String progress) {
 		this.task_name = task_name;
 		this.progress = progress;
 	}
@@ -12,7 +12,7 @@ public class Todo{
 		return this.task_name;
 	}
 	
-	public int getProgress() {
+	public String getProgress() {
 		return this.progress;
 	}
 }
