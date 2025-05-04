@@ -6,18 +6,38 @@ import java.time.format.DateTimeFormatter;
 
 public class TaskManager {
     private static final String CSV_FILE = "tasks.csv";
+    // 日付のフォーマットを指定
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+
+    // CSVファイルが存在しない場合に新規作成するメソッド
+    public static void createCsvFileIfNotExists() {
+        File file = new File(CSV_FILE);
+        if (!file.exists()) {
+            try {
+                if (file.createNewFile()) {
+                    System.out.println("CSVファイル '" + CSV_FILE + "' を作成しました。");
+                } else {
+                    System.err.println("CSVファイル '" + CSV_FILE + "' の作成に失敗しました。");
+                }
+            } catch (IOException e) {
+                System.err.println("CSVファイル '" + CSV_FILE + "' の作成中にエラーが発生しました: " + e.getMessage());
+            }
+        }
+    }
+    
+
+    
 
     // Todo.javaからToDoを取得
-    public static List<Task> getTasks(List<Todo> todos) {
+    public static List<Task> getTasks(List<Task> todos) {
         // 現在の日付を取得
         LocalDate today = LocalDate.now();
-        // 日付のフォーマットを指定
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         // 日付をフォーマット
         String date = today.format(formatter);
         List<Task> tasks = new ArrayList<>();
-        Task task = new Task("", 0, date); // タスクの初期化
-        for (Todo todo : todos)  {
+        Task task = new Task("", "0", date);
+        for (Task todo : todos)  {
             task.setTaskName(todo.getTaskName());
             task.setProgress(todo.getProgress());
             task.setDate(date);
@@ -39,7 +59,48 @@ public class TaskManager {
         }
     }
 
-    // 指定した日付のタスクを取得 (修正中)
+    // CSVファイルから全てのタスクを取得
+    public static List<Task> getAllTasks() {
+        List<Task> tasks = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(CSV_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 3) {
+                    tasks.add(new Task(parts[0], parts[1], parts[2]));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tasks;
+    }
+
+    // Alltaskメソッドから最新のタスクを取得
+    public static List<Task> getLatestTasks() {
+        List<Task> allTasks = getAllTasks();
+        if (allTasks.isEmpty()) {
+            return new ArrayList<>(); // タスクがない場合は空のリストを返す
+        }
+
+        LocalDate latestDate = LocalDate.parse(allTasks.get(0).getDate(), formatter);
+        List<Task> latestTasks = new ArrayList<>();
+        latestTasks.add(allTasks.get(0)); // 最初のタスクを初期値とする
+
+        for (int i = 1; i < allTasks.size(); i++) {
+            LocalDate currentDate = LocalDate.parse(allTasks.get(i).getDate(), formatter);
+            if (currentDate.isAfter(latestDate)) {
+                latestDate = currentDate;
+                latestTasks.clear(); 
+                latestTasks.add(allTasks.get(i));
+            } else if (currentDate.isEqual(latestDate)) {
+                latestTasks.add(allTasks.get(i)); // 同じ最新日付のタスクを追加
+            }
+        }
+        return latestTasks;
+    }
+
+    // 指定した日付のタスクを取得
     public static List<Task> getTasksByDate(String date) {
         List<Task> tasks = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(CSV_FILE))) {
@@ -47,7 +108,7 @@ public class TaskManager {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length == 3 && parts[2].equals(date)) {
-                    tasks.add(new Task(parts[0], Integer.parseInt(parts[1]), parts[2]));
+                    tasks.add(new Task(parts[0], parts[1], parts[2]));
                 }
             }
         } catch (IOException e) {
