@@ -58,7 +58,7 @@ public class TaskManager {
     // 複数のタスクをCSVファイルに保存
     public static void saveTasks(List<Task> tasks) {
         //try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE, true))) {
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(CSV_FILE), "Shift-JIS"))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(CSV_FILE, true), "Shift-JIS"))) {
             for (Task task : tasks) {
                writer.write(task.getTaskName() + "," + task.getProgress() + "," + task.getDate());
                writer.newLine();
