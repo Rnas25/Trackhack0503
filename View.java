@@ -102,22 +102,21 @@ public class View extends JFrame{
 			
 			if(k < data_read.size()) {
 				if(data_read.get(k).getTaskName() != "") {
-					task = new String(data_read.get(i).getTaskName());
+					task = new String(data_read.get(k).getTaskName());
 				}
-				k++;
 			}
-			k = 0;
+			
 			int default_index = 0;
 			if(k < data_read.size()) {
 				if(data_read.get(k).getProgress() != "") {
 					for(int j=0; j < 12; j++) {
-						if(data_read.get(i).getProgress() == progress_label[j]) {
+						if(data_read.get(k).getProgress().equals(progress_label[j])) {
 							default_index = j;
 						}
 					}
-				}
-				k++;
+				}	
 			}
+			k++;
 			// タスク名のテキストフィールド
 			task_list.add(new JTextField(task));
 			//task_list[i] = new JTextField(task);
